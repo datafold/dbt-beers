@@ -2,17 +2,25 @@ kind: pipeline
 name: default
 
 steps:
-- name: compile
+- name: dbt
   image: fishtownanalytics/dbt:0.19.1
+  volumes:
+    - name: secrets
+      path: /secrets/
   commands:
-  - echo $PASSWORD
-  - echo $PASSWORD | rev
-  - echo $PASSWORD > /tmp/fokko
-  - cat /tmp/fokko
-  - env
-  - dbt compile
+  - mkdir -p $CLOUDSDK_CONFIG
+  - apt-get update -q && apt-get install -q -y apt-transport-https ca-certificates gnupg curl
+  - echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -q -y && apt-get -q install google-cloud-sdk -y
+  - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+  - dbt run --profiles-dir=`pwd`
+  - rm -rf $CLOUDSDK_CONFIG $GOOGLE_APPLICATION_CREDENTIALS
   environment:
-    PASSWORD:
-      from_secret: FOKKOS_SECRET
-    USERNAME:
-      from_secret: notexists
+    CLOUDSDK_CONFIG: /tmp/gcloud/
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/marine-potion-312409-04161a0dbb38.json
+- name: data-diff
+  image: python:3.8
+
+volumes:
+- name: secrets
+  host:
+    path: /home/ubuntu/fokko/
