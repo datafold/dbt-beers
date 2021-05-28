@@ -1,0 +1,26 @@
+
+version: 2
+
+models:
+    - name: per_state
+      description: Aggregations on the beers per state
+      columns:
+          - name: brewery_state
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+          - name: unique_breweries
+            description: Number of unique breweries
+          - name: unique_styles
+            description: Number of unique beer styles, IPA etc
+          - name: avg_abv
+            description: Average alcohol percentage in the beer
+          - name: avg_ibu
+            description: Average volume of the beer
+
+sources:
+  - name: beers
+    tables:
+      - name: beers
+      - name: breweries
