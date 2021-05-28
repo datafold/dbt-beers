@@ -1,0 +1,8 @@
+kind: pipeline
+name: default
+
+steps:
+- name: compile
+  image: fishtownanalytics/dbt
+  commands:
+  - dbt compile
