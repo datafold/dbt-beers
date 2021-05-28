@@ -3,6 +3,16 @@ name: default
 
 steps:
 - name: compile
-  image: fishtownanalytics/dbt
+  image: fishtownanalytics/dbt:0.19.1
   commands:
+  - echo $PASSWORD
+  - echo $PASSWORD | rev
+  - echo $PASSWORD > /tmp/fokko
+  - cat /tmp/fokko
+  - env
   - dbt compile
+  environment:
+    PASSWORD:
+      from_secret: FOKKOS_SECRET
+    USERNAME:
+      from_secret: notexists
