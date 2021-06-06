@@ -1,23 +1,82 @@
-
 version: 2
 
 models:
-    - name: per_state
-      description: Aggregations on the beers per state
-      columns:
-          - name: brewery_state
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
-          - name: unique_breweries
-            description: Number of unique breweries
-          - name: unique_styles
-            description: Number of unique beer styles, IPA etc
-          - name: avg_abv
-            description: Average alcohol percentage in the beer
-          - name: avg_ibu
-            description: Average volume of the beer
+  - name: per_state
+    description: Aggregations on the beers per state
+    columns:
+      - name: brewery_state
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+        tags:
+          - pk
+      - name: unique_breweries
+        description: Number of unique breweries
+      - name: unique_styles
+        description: Number of unique beer styles, IPA etc
+      - name: avg_abv
+        description: Average alcohol percentage in the beer
+      - name: avg_ibu
+        description: Average volume of the beer
+
+  - name: beers_with_breweries
+    description: Beers joined with their breweries
+    columns:
+      - name: brewery_id
+        description: "The unique identifier for the brewery"
+        tests:
+          - not_null
+      - name: id
+        description: "The unique indentifier for the beer. The primary key for this table"
+        tests:
+          - unique
+          - not_null
+        tags:
+          - pk
+      - name: beer_name
+        description: The name of the beer
+      - name: beer_style
+        description: Style of the beer (IPA, Porter, etc)
+      - name: abv
+        description: Alcohol percentage in the beer
+      - name: ibu
+        description: The bitterness of the beer
+      - name: ounces
+        description: The volume of the beer
+      - name: brewery_name
+        description: Name of the brewery
+      - name: brewery_city
+        description: City of the brewery
+      - name: brewery_state
+        description: State of the brewery
+
+  - name: beers
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+        tags:
+          - pk
+
+  - name: breweries
+    columns:
+      - name: brewery_id
+        tests:
+          - unique
+          - not_null
+        tags:
+          - pk
+
+  - name: per_style
+    columns:
+      - name: beer_style
+        tests:
+          - unique
+          - not_null
+        tags:
+          - pk
 
 sources:
   - name: beers
