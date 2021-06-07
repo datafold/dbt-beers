@@ -2,25 +2,27 @@ kind: pipeline
 name: default
 
 steps:
-- name: dbt
-  image: fishtownanalytics/dbt:0.19.1
-  volumes:
-    - name: secrets
-      path: /secrets/
-  commands:
-  - mkdir -p $CLOUDSDK_CONFIG
-  - apt-get update -q && apt-get install -q -y apt-transport-https ca-certificates gnupg curl
-  - echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -q -y && apt-get -q install google-cloud-sdk -y
-  - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-  - dbt run --profiles-dir=`pwd`
-  - rm -rf $CLOUDSDK_CONFIG $GOOGLE_APPLICATION_CREDENTIALS
-  environment:
-    CLOUDSDK_CONFIG: /tmp/gcloud/
-    GOOGLE_APPLICATION_CREDENTIALS: /secrets/marine-potion-312409-04161a0dbb38.json
-- name: data-diff
-  image: python:3.8
+  - name: dbt
+    image: fishtownanalytics/dbt:0.19.1
+    volumes:
+      - name: secrets
+        path: /secrets/
+    commands:
+      - mkdir -p $CLOUDSDK_CONFIG
+      - echo $google_application_credentials > $CLOUDSDK_CONFIG/credentials.json
+      - apt-get update -q && apt-get install -q -y apt-transport-https ca-certificates gnupg curl
+      - echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -q -y && apt-get -q install google-cloud-sdk -y
+      - gcloud auth activate-service-account --key-file=$CLOUDSDK_CONFIG/credentials.json
+      - dbt run --profiles-dir=`pwd`
+      - rm -rf $CLOUDSDK_CONFIG
+    environment:
+      CLOUDSDK_CONFIG: /tmp/gcloud/
+      GOOGLE_APPLICATION_CREDENTIALS:
+        from_secret: google_application_credentials
+  - name: data-diff
+    image: python:3.8
 
-volumes:
-- name: secrets
-  host:
-    path: /home/ubuntu/fokko/
+---
+kind: secret
+name: google_application_credentials
+data: 2deqX1Tz0HUAzHZvftg/n/nU4bGSQD2v6EWJsfMSgma5nuegHk0CBgqaMZpGCQm3JT2yLuxmqP7emDf+jAixhOvFLbu44+ROM8WH2SVQTYrS/pWjqLpEv8ajdCQS13ICsNCcsr7VQmpW13Ig9jly5+ZPeH6kpb5AGwXVtHezOxNUROVzPcNpT9XNHVf+HIY7R6j6s3OFhTQIWCybKmL2O7AqgNlwDiU/0dK4FjrRQF+ELwV+kXEnv58n5trfYe2C0IcKm5RUbW4ZEBprV64ovIhTdBHi2uCvZUYLJIp/JDLwPi9pI00UmQp8HB/+UD1+1vFjF5tURtMyuSabkfMzVVnoKNzW/3U/MOltCrX/iWaeJkEIexdtvFHB9XIn8TJEv8GKeXBvR2JoQTZk3b2OGonGmqgUh1txjp/CkQaLPaQzWYIaQBeEw0Uj+0JQsZE0MUyJc5DuEJH67Clq/jftq6e1g6fTpPsUmeSeYof98ihNhknRKCmAYju2/JY2nKUNRX2M1um9FRZwZTXjlu3RTpGLaXKSUso9g9W0HgIBlecvL+o3WepwNVJzQsysxskZHH0U7Q9oUB8AKD1CLMx74nUTRNmfdrG7jW88QewhLEYk/Kqyz2MofrcNkmkXGmejAKe5iYbjlfq9KdyIVnCZWvvN71tP1LTLzB9CgWLxc2SxUhF3DyHj6CL10S0MU+X4Z5QgANpO/n1mKt7TnKaPh9fHxswcJd0kHPc9gotXr8PJvFhhLEQ8LZbgaDBp/ukpYvr4utEVjnCtIVLkHmEx8ivH2OPibnMhLZeXHxeP2gpZNyI+3W7rUYe0CdbkrpURcnNhtNQ138zIlUpwNU75EWUQ/lPDeF5Wc7vGuixO+aDA85/qfC4xW+K6tvd+Trlb9pwxUgmu2ykBPX2rVBxf/5MIzQiVrbxAzauRVidMW/otfw53m5VIK+9Re5EMSmTkPu6/RoxA3U1y/3r3NyXiSlfzf42sIfolXY2i7qDz5y84mRYAdqFh1kUoQUvu+E/sEt+gFdgQ/HFwuNFwPUhEpjGpL+Dvb5tRptm+dLlyLXsn+qDK4/rvP/uX9+8rUKztpbUbWBEpnK68B2RxGBXC63LhNEFdzdr3ckDXFF0dh5Lt8/Pu6PjllPaB5BrzSADPrebM8IVxOOLWbylkwkgepjHNAL1QB1YbS3SrFTSOyyO38OeWiOHU/5B2blMFGsYwSxjYU5iHHWe+o/Nh1ZSHtc5UOBYSDhulSvqyYdfxCyNR49o06cXBv5vZhCYcXW/aLKpS2sPOQffGZ6hQYwkzEY6e8GAmsU/n1Moes8fmZ3v9jZo265EvIBJB3BNgNtvzZp6/XWJS829YGXMV+wCHiALeP4l2c7UbTFNBiEhlMAJN5WIgNokiISAcueHtSCcYHjf9znyYXeVux0iISCVED+14nwAb7TKlzWqpomAuHNlKSeijhmHrBQEDzIkPtrVi2XsZRdVHHc7mQvE7OGzEWHsbdoFG7ztAS3A1VI3y7tueSk3Z4D5cJgm11TnxElo85C7p2JnawMMxrjBPRMTzXQGZXIyHKvcydMhS3o9DAo/9oOGejyERmcLFvnhtCy78EXvUa8HOBCc6ua0p/jhWsa+2fAGUWmUL0aWY9N6jrFB+rtIC9PR2sIDaB8yNS6O5hJzkbUFqH9oYEPodP/wSR5iziumO/KWR2ttTkZuHXGA8661Ju0FYbLLBKMqtKkmb4lLMFsrtqDx+V2OX78AZfg9uC7A7ZPfCaTxqEwZ+VwZjMIwKrWKcOwCTV0NEn8iCKPLnWlj7YEJyN432D0+U407GxELbRiNRpgtDQNWtCUb4+9LRH1JOlwc3NeEh8dzkQ2ULawotzqAGKYvX22CCwycz/CMjUAqfoW0sDTK++HgKgZAL1MFtJ+OguV4ozAH0UZVrO0UyJRVClxP0+Sabz0SMlTnuovs7WSX059HOdB4AMhv1JlpfmCxlSWzHLBafi34/qq1tHSOPVHH2UxISJlp0TUXMoaGTMmaBdJMa8kNyuKoiwQZPP/w38eLQMbUrghy1r76hv+yxq6Wf4/9DZGfJfwG0enjPZ8LftgssRQUvw6y7Xo+K4TYPlOs2+Ve4lWIOm0BaEOB4IoUykBH/Ndy4BppTUZrub8alFeYWBcMDcNbXdkbIInspdUalMCWyZ7zp6TY2s/CLw8KZ0hVxADNMsKqbaoDrcIYTjzrn5FUThzZCoc/615g+wpqI5D96Sxd0RV28eFgNGhYV6lWRBTCjVTm1vzf0EPOHLrMssrSJUgz0kalCaWlXOyVOXajYFKVtkjVSKfv90vK1vgoCtfMm/qUlZSVGDiM18W0Mq8bl9wcLNHctTRndKLmFdJww4DGmdyTczI1uRmUjCsagk9mVQ1te+loYsJJ+oGzOZNGS+vwG1e3KBAaMDd/bceWiA+6EGvu4TYuD/LlhquJHYsfA/LKcdcxdkZEWh3xi8kMeyxQg26zen0/NStn7EcOVWeOKHahG8oPmEWNHpS6jQz3tbdrHvFAzCHNqhZ2RoJSvRh9bIM/gWFjDZgR7mTVo+G4wb+mjTMPCFxRNKsZMhgABRkSqfwkBqiwDg8FUxJz/f0utbGWbKueML0VxKUE3dVGhhmRHcazYzLKANJd/stQyXcPGkeiOgGy4bMbbJkLcE+lvldODYED/PqITUQNPUBAa2o+3Ok/CPkjOdXscP900n/XLoN8j+jypnV2gAqmm8Fs12a2nlJ0kz+mowxw0lhvwnaB+Ue1vTgXkzct1j/TtyBRI5ceMewY0KQA4sRf5DBLPu16ycmnftUrME+qn85QsUPEC3qE8jgXpLqIkfvVHVpcaOo1zGZeRNrr1WARvx/BynyUbN94LMqBt20rbC2OyZ+9m8WoSx8hD1rzqjFNR1IDHeqsNGd2V/uKtJqIFYYbDMpA2EcoMGvsGu3/+ZuKTyamXhZFoV2z1z4YiubE3v8yzj0tvOMHXLqrw0o3PLZjTPvrg6xgP4Uh4RwIra5510efTUhwZAHZT2Ga35ZWhAsZeCuq9CpkJF81XyJ7Lh7NXnDsgMlujcy3HvkfGwBTnrIIoHUC5OBE4z9xIU2coOzAqXR+gGK82cI8m3ygqLr0AqGtGjNI/N0FlDBZDVdKhLYLmgA==
