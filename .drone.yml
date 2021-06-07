@@ -8,14 +8,13 @@ steps:
       - name: secrets
         path: /secrets/
     commands:
-      - mkdir -p $CLOUDSDK_CONFIG
+      - mkdir -p /tmp/gcloud/
+      - printf '%s' "$GOOGLE_APPLICATION_CREDENTIALS" | gcloud auth activate-service-account --key-file=/tmp/gcloud/cert.json
       - apt-get update -qq && apt-get install -qq -y apt-transport-https ca-certificates gnupg curl
       - echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -qq -y && apt-get -qq install -y google-cloud-sdk
-      - printf '%s' "$GOOGLE_APPLICATION_CREDENTIALS" | gcloud auth activate-service-account --key-file=-
       - dbt run --profiles-dir=`pwd`
-      - rm -rf $CLOUDSDK_CONFIG
+      - rm -rf /tmp/gcloud/
     environment:
-      CLOUDSDK_CONFIG: /tmp/gcloud/
       GOOGLE_APPLICATION_CREDENTIALS:
         from_secret: google_application_credentials
   - name: data-diff
