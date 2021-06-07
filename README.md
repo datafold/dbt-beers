@@ -1,4 +1,4 @@
-[![Build Status](https://gerard.st.datafold.io/api/badges/Fokko/dbt-beers/status.svg)](https://gerard.st.datafold.io/Fokko/dbt-beers)
+[![Build Status](https://ci.driesprong.frl/api/badges/Fokko/dbt-beers/status.svg)](https://gerard.st.datafold.io/Fokko/dbt-beers)
 
 Welcome to your new dbt project!
 
