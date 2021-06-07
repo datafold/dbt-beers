@@ -12,7 +12,9 @@ steps:
       - printf '%s' "$GOOGLE_APPLICATION_CREDENTIALS" > /tmp/gcloud/cert.json
       - apt-get update -qq && apt-get install -qq -y apt-transport-https ca-certificates gnupg curl
       - echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -qq -y && apt-get -qq install -y google-cloud-sdk
-      - gcloud auth activate-service-account --key-file=/tmp/gcloud/cert.json
+      - gcloud auth activate-service-account dbt-789@marine-potion-312409.iam.gserviceaccount.com --key-file=/tmp/gcloud/cert.json
+      - gcloud auth list
+      - gcloud auth application-default login
       - dbt run --profiles-dir=`pwd`
       - rm -rf /tmp/gcloud/
     environment:
