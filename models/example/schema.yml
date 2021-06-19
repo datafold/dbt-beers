@@ -57,8 +57,10 @@ models:
         tests:
           - unique
           - not_null
-        tags:
-          - pk
+      - name: beer_name
+        tests:
+          - unique
+          - not_null
 
   - name: breweries
     columns:
