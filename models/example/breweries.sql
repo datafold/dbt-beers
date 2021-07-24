@@ -1,8 +1,11 @@
 
 SELECT
-  int64_field_0   AS brewery_id,
-  string_field_1  AS brewery_name,
-  string_field_2  AS brewery_city,
-  string_field_3  AS brewery_state
+  id                    AS brewery_id,
+  name                  AS brewery_name,
+  city                  AS brewery_city,
+  trim(state)           AS brewery_state,
+  'USA'                 AS brewery_country
 FROM
-  {{ source('beers', 'breweries') }}
+  {{ ref('seed_breweries') }}
+-- WHERE
+--   trim(string_field_3) <> 'TX'
