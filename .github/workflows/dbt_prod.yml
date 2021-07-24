@@ -38,7 +38,6 @@ jobs:
       - name: submit artifacts to datafold
         run: |
           set -ex
-          export PR_SHA=$(git rev-list --no-merges -n 1 HEAD)
-          datafold dbt upload --ci-config-id 20 --run-type=production --target-folder ./target/ --commit-sha ${PR_SHA}
+          datafold dbt upload --ci-config-id 20 --run-type=production --target-folder ./target/ --commit-sha ${GITHUB_SHA}
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
