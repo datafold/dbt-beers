@@ -3,7 +3,7 @@ name: DBT prod build
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   dbt:
