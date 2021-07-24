@@ -32,12 +32,12 @@ models:
         tests:
           - unique
           - not_null
-        meta:
-          primary-key: true
+#        meta:
+#          primary-key: true
       - name: beer_name
         description: The name of the beer
-        meta:
-          primary-key: true
+#        meta:
+#          primary-key: true
       - name: beer_style
         description: Style of the beer (IPA, Porter, etc)
       - name: abv
