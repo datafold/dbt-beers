@@ -1,13 +1,16 @@
-bigquery:
+default:
   target: dev
   outputs:
     dev:
-      type: bigquery
-      method: oauth
-      project: marine-potion-312409
-      dataset: analysis
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+
+      # User/password auth
+      user: fokko
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
+
+      role: PUBLIC
+      database: INTEGRATION
+      warehouse: INTEGRATION
+      schema: INTEGRATION
       threads: 1
-      timeout_seconds: 300
-      location: EU
-      priority: interactive
-      retries: 1

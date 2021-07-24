@@ -1,0 +1,34 @@
+name: DBT prod build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dbt:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: install deps
+        run: pip install dbt datafold-sdk
+
+      - name: run dbt
+        run: dbt run --profiles-dir /home/runner/work/dbt-snowflake/dbt-snowflake/
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+
+      - name: submit artifacts to datafold
+        run: datafold dbt upload --ci-config-id 1 --run-type=production --target-folder ./target/
+        env:
+          DATAFOLD_HOST: ${{ secrets.DATAFOLD_HOST }}
+          DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
