@@ -1,5 +1,5 @@
 {{ config(
-  persist_docs={"relation": true, "columns": true}
+    persist_docs={"relation": true, "columns": true}
 ) }}
 
 SELECT *
