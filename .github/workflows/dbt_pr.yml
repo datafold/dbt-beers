@@ -12,10 +12,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: Dump context
-        uses: crazy-max/ghaction-dump-context@v1
-
-
       - name: submit artifacts to datafold
         run: |
           set -ex
