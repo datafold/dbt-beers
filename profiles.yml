@@ -12,5 +12,5 @@ default:
       role: PUBLIC
       database: INTEGRATION
       warehouse: INTEGRATION
-      schema: INTEGRATION
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA') | as_text }}"
       threads: 1
