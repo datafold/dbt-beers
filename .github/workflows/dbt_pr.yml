@@ -12,17 +12,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: Dump context
-        uses: crazy-max/ghaction-dump-context@v1
-
-      - name: submit artifacts to datafold
-        run: |
-          set -ex
-          git rev-parse HEAD
-          git rev-list --no-merges -n 1 HEAD
-          echo ${GITHUB_SHA}
-          git log
-
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
@@ -47,6 +36,7 @@ jobs:
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload --ci-config-id 20 --run-type=pull_request --target-folder ./target/ --commit-sha ${GITHUB_SHA}
+          datafold dbt upload --ci-config-id 20 --run-type=pull_request --target-folder ./target/ --commit-sha ${GIT_SHA}
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
+          GIT_SHA: ${{ github.event.after }}
