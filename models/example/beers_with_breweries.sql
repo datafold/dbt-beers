@@ -2,8 +2,6 @@
     persist_docs={"relation": true, "columns": true}
 ) }}
 
-SELECT
-    *,
-    'change' as changed
+SELECT *
 FROM {{ ref('beers') }}
 JOIN {{ ref('breweries') }} USING (brewery_id)
