@@ -38,7 +38,8 @@ jobs:
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload --ci-config-id 20 --run-type=production --target-folder ./target/ --commit-sha ${GIT_SHA}
+          datafold dbt upload --ci-config-id 1 --run-type=production --target-folder ./target/ --commit-sha ${GIT_SHA}
         env:
+          DATAFOLD_HOST: ${{ secrets.DATAFOLD_HOST }}
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
-          GIT_SHA: ${{ github.event.after }}
+          GIT_SHA: ${{ github.pull_request.head.sha }}
