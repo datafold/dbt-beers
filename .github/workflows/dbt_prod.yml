@@ -42,4 +42,4 @@ jobs:
         env:
           DATAFOLD_HOST: ${{ secrets.DATAFOLD_HOST }}
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
-          GIT_SHA: ${{ github.pull_request.head.sha }}
+          GIT_SHA: ${{ github.event.pull_request.head.sha }}
