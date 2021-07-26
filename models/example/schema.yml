@@ -6,6 +6,8 @@ models:
     columns:
       - name: brewery_state
         description: "The primary key for this table"
+        meta:
+          primary-key: true
       - name: unique_breweries
         description: Number of unique breweries
       - name: unique_styles
@@ -15,6 +17,13 @@ models:
       - name: avg_ibu
         description: Average volume of the beer
 
+  - name: per_style
+    columns:
+      - name: beer_style
+        description: "The primary key for this table"
+        meta:
+          primary-key: true
+
   - name: beers_with_breweries
     description: Beers joined with their breweries
     columns:
@@ -22,11 +31,15 @@ models:
         description: "The unique identifier for the brewery"
         tests:
           - not_null
+        meta:
+          primary-key: true
       - name: beer_id
         description: "The unique indentifier for the beer. The primary key for this table"
         tests:
           - unique
           - not_null
+        meta:
+          primary-key: true
       - name: beer_name
         description: The name of the beer
       - name: beer_style
