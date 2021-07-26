@@ -19,6 +19,9 @@ jobs:
       - name: install deps
         run: pip install dbt datafold-sdk
 
+      - name: get event
+        run: cat /home/runner/work/_temp/_github_workflow/event.json
+
       - name: run seed
         run: dbt seed --full-refresh --profiles-dir ./
         env:
