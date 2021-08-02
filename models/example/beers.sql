@@ -4,13 +4,13 @@
 ) }}
 
 SELECT
-  id            AS beer_id,
+  id            AS "beer id",
   name          AS beer_name,
   style         AS beer_style,
   abv           AS abv,
   ibu           AS ibu,
   brewery_id    AS brewery_id,
   ounces        AS ounces,
-  '1'           AS one
+  '1'           AS "number one"
 FROM
   {{ ref('seed_beers') }}

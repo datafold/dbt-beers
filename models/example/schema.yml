@@ -33,8 +33,7 @@ models:
           - not_null
         meta:
           primary-key: true
-      - name: beer_id
-        description: "The unique indentifier for the beer. The primary key for this table"
+      - name: beer id
         tests:
           - unique
           - not_null
@@ -56,13 +55,10 @@ models:
         description: City of the brewery
       - name: brewery_state
         description: State of the brewery
-    tests:
-      - unique:
-          column_name: concat(beer_id, '-', beer_name)
 
   - name: beers
     meta:
       primary-key:
-        - id
+        - beer id
     columns:
-      - name: id
+      - name: beer id

@@ -1,8 +1,7 @@
 {{ config(
-    materialized="table",
-    persist_docs={"relation": true, "columns": true}
+    materialized="table"
 ) }}
 
 SELECT *
-FROM {{ ref('beers') }}
-JOIN {{ ref('breweries') }} USING (brewery_id)
+FROM {{ ref('beers') }} beers
+JOIN {{ ref('breweries') }} breweries USING (brewery_id)
