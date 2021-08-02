@@ -25,6 +25,14 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "dbt_modules"
 
 
+seeds:
+  beer_analytics:
+    +enabled: true
+    seed_beers:
+      +column_types:
+        ibu: decimal
+
+
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 

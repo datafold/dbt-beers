@@ -1,4 +1,6 @@
-
+{{ config(
+    materialized="table"
+) }}
 
 SELECT
   beer_style,
@@ -7,4 +9,3 @@ FROM
   {{ ref('beers') }}
 GROUP BY
   beer_style
-  

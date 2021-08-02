@@ -1,4 +1,8 @@
 
+{{ config(
+    materialized="table"
+) }}
+
 SELECT
   id                    AS brewery_id,
   name                  AS brewery_name,
