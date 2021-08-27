@@ -33,7 +33,7 @@ models:
           - not_null
         meta:
           primary-key: true
-      - name: beer id
+      - name: beer_id
         tests:
           - unique
           - not_null
@@ -59,6 +59,6 @@ models:
   - name: beers
     meta:
       primary-key:
-        - beer id
+        - beer_id
     columns:
-      - name: beer id
+      - name: beer_id
