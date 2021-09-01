@@ -48,3 +48,4 @@ jobs:
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
           DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
+          GIT_SHA: ${{ github.event.pull_request.head.sha }}
