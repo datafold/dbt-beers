@@ -64,3 +64,11 @@ models:
         - beer_id
     columns:
       - name: beer_id
+ 
+  - name: breweries
+    columns:
+      - name: brewery_id
+        description: "The primary key for this table"
+        meta:
+          primary-key: true
+
