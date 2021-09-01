@@ -41,6 +41,8 @@ models:
           primary-key: true
       - name: beer_name
         description: The name of the beer
+        meta:
+          primary-key: true
       - name: beer_style
         description: Style of the beer (IPA, Porter, etc)
       - name: abv
@@ -55,6 +57,7 @@ models:
         description: City of the brewery
       - name: brewery_state
         description: State of the brewery
+<<<<<<< HEAD
 
   - name: beers
     meta:
@@ -62,3 +65,8 @@ models:
         - beer_id
     columns:
       - name: beer_id
+=======
+    tests:
+      - unique:
+          column_name: concat(beer_id, '-', beer_name)
+>>>>>>> 50360a5531dc3f65acdc5ace9db8f8625b8bc5f0
