@@ -1,4 +1,4 @@
-name: DBT prod build
+name: dbt + datafold
 
 on: [push, pull_request]
 
@@ -16,7 +16,7 @@ jobs:
           python-version: '3.8'
 
       - name: install deps
-        run: pip install dbt datafold-sdk
+        run: pip install -q dbt datafold-sdk
 
       - name: dbt deps
         run: dbt deps
@@ -38,6 +38,7 @@ jobs:
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload --ci-config-id 1 --run-type production --target-folder ./target/
+          datafold dbt upload --ci-config-id 29 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
+          DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
