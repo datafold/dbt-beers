@@ -3,11 +3,11 @@ name: dbt + datafold
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
 
 jobs:
-  dbt:
+  run:
     runs-on: ubuntu-20.04
     timeout-minutes: 15
 
