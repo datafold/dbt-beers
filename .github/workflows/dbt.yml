@@ -1,7 +1,6 @@
-name: DBT PR build
+name: DBT prod build
 
-on:
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   dbt:
@@ -19,28 +18,24 @@ jobs:
       - name: install deps
         run: pip install dbt datafold-sdk
 
-      - name: get event
-        run: cat /home/runner/work/_temp/_github_workflow/event.json
-
       - name: run seed
         run: dbt seed --full-refresh --profiles-dir ./
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_SCHEMA: BEERS_DEV
+          SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: run dbt
         run: dbt run --profiles-dir ./
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_SCHEMA: BEERS_DEV
+          SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload --ci-config-id 1 --run-type=pull_request --target-folder ./target/ --commit-sha ${GIT_SHA}
+          datafold dbt upload --ci-config-id 1 --run-type production --target-folder ./target/
         env:
           DATAFOLD_HOST: ${{ secrets.DATAFOLD_HOST }}
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
-          GIT_SHA: ${{ github.event.pull_request.head.sha }}
