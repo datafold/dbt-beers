@@ -11,10 +11,10 @@
     {% for order_number in range(10) %}
       SELECT
          TO_VARCHAR(
-            DATEADD(Day, -1, current_timestamp),
+            DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
             'YYYYMMDD{{ order_number }}'
          )::int                                                            AS order_no,
-         {% if order_number is divisibleby 7 %}
+         {% if order_number is divisibleby 13 %}
             'PENDING'                                                      AS status,
          {% else %}
             'DELIVERED'                                                    AS status,

@@ -10,9 +10,9 @@
 {% for day_ago in range(30) %}
     {% for order_number in range(10) %}
         -- Each order has between 1 and 5 order_lines
-        {% for order_line in range(range(1, 5) | random) %}
+        {% for order_line in range(3) %}
             SELECT TO_VARCHAR(
-                        DATEADD(Day, -1, current_timestamp),
+                        DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
                         'YYYYMMDD{{ order_number }}'
                    )::int AS order_no,
                    {{ order_line }}            AS order_line,
