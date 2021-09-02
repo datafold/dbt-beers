@@ -72,3 +72,14 @@ models:
           combination_of_columns:
             - order_no
             - order_line
+
+  - name: sales
+    meta:
+      primary-key:
+        - order_no
+        - order_line
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - order_no
+            - order_line
