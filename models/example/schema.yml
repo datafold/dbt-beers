@@ -1,29 +1,6 @@
 version: 2
 
 models:
-  - name: per_state
-    description: Aggregations on the beers per state
-    columns:
-      - name: brewery_state
-        description: "The primary key for this table"
-        meta:
-          primary-key: true
-      - name: unique_breweries
-        description: Number of unique breweries
-      - name: unique_styles
-        description: Number of unique beer styles, IPA etc
-      - name: avg_abv
-        description: Average alcohol percentage in the beer
-      - name: avg_ibu
-        description: Average volume of the beer
-
-  - name: per_style
-    columns:
-      - name: beer_style
-        description: "The primary key for this table"
-        meta:
-          primary-key: true
-
   - name: beers_with_breweries
     description: Beers joined with their breweries
     columns:
@@ -64,11 +41,45 @@ models:
         - beer_id
     columns:
       - name: beer_id
- 
+
   - name: breweries
+    meta:
+      primary-key:
+        - brewery_id
     columns:
       - name: brewery_id
-        description: "The primary key for this table"
-        meta:
-          primary-key: true
 
+  - name: orders
+    meta:
+      primary-key:
+        - order_no
+    columns:
+      - name: order_no
+
+  - name: order_lines
+    meta:
+      primary-key:
+        - order_no
+        - order_line
+    columns:
+      - name: order_no
+        tests:
+          - relationships:
+              to: ref('orders')
+              field: order_no
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - order_no
+            - order_line
+
+  - name: sales
+    meta:
+      primary-key:
+        - order_no
+        - order_line
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - order_no
+            - order_line
