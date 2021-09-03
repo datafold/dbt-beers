@@ -67,11 +67,9 @@ models:
           - relationships:
               to: ref('orders')
               field: order_no
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - order_no
-            - order_line
+      - name: order_line
+        tests:
+          - unique
 
   - name: sales
     meta:
