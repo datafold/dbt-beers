@@ -78,6 +78,17 @@ models:
       primary-key:
         - order_no
         - order_line
+    columns:
+      - name: order_no
+        tests:
+          - not_null
+        meta:
+          primary-key: true
+      - name: order_line
+        tests:
+          - not_null
+        meta:
+          primary-key: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
