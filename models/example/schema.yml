@@ -72,21 +72,50 @@ models:
           - unique
 
   - name: sales
+    tags:
+      - finance
     meta:
-      primary-key:
-        - order_no
-        - order_line
+      owner: fokko@datafold.com
     columns:
+      - name: beer_id
+        description: The unique indentifier of the beer
+      - name: beer_name
+        description: The name of the beer as on the label
+      - name: beer_style
+        description: The style of the beer (IPA, Porter, etc)
+      - name: abv
+        description: Alcohol by volume
+      - name: ibu
+        description: International Bitterness Unit
+      - name: ounces
+        description: Volume of a single unit
+      - name: brewery_id
+        description: The unique indentifier of the brewery
+      - name: brewery_name
+        description: The official name of the brewery
+      - name: brewery_city
+      - name: brewery_state
+      - name: brewery_country
       - name: order_no
+        description: The order number
         tests:
           - not_null
-        meta:
-          primary-key: true
+        tags:
+          - primary-key
       - name: order_line
+        description: The order line number
         tests:
           - not_null
-        meta:
-          primary-key: true
+        tags:
+          - primary-key
+      - name: order_created_at
+        description: When the order was created
+      - name: order_li_quantity
+        description: The number of units for the order line
+      - name: order_li_price_each
+        description: Price for a single unit
+      - name: order_li_price_total
+        description: The total price for the order line
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
