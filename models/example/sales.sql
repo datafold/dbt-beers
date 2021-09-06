@@ -1,6 +1,7 @@
 {{ config(
     materialized="table",
-    persist_docs={"relation": true, "columns": true}
+    persist_docs={"relation": true, "columns": true},
+    transient=false
 ) }}
 
 SELECT
