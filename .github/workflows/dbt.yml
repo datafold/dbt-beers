@@ -54,5 +54,6 @@ jobs:
           datafold dbt upload --ci-config-id 12 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
+          DATAFOLD_HOST: ${{ secrets.DATAFOLD_HOST }}
           DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
           GIT_SHA: "${{ github.ref == 'refs/heads/master' && github.sha || github.event.pull_request.head.sha }}"
