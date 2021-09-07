@@ -98,16 +98,8 @@ models:
       - name: brewery_country
       - name: order_no
         description: The order number
-        tests:
-          - not_null
-        tags:
-          - primary-key
       - name: order_line
         description: The order line number
-        tests:
-          - not_null
-        tags:
-          - primary-key
       - name: order_created_at
         description: When the order was created
       - name: order_li_quantity

@@ -6,7 +6,7 @@
 
 SELECT
  beers_with_breweries.beer_id               AS beer_id,
- beers_with_breweries.beer_name             AS beer_name,
+ trim(beers_with_breweries.beer_name)       AS beer_name,
  beers_with_breweries.beer_style            AS beer_style,
  beers_with_breweries.abv                   AS abv,
  beers_with_breweries.ibu                   AS ibu,
