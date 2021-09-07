@@ -109,7 +109,5 @@ models:
       - name: order_li_price_total
         description: The total price for the order line
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - order_no
-            - order_line
+      - unique:
+          column_name: "order_no || order_line"
