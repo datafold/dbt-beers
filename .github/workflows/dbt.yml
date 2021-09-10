@@ -21,8 +21,11 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: install deps
-        run: pip install -q dbt datafold-sdk
+      - name: install dbt
+        run: pip install -q dbt
+      
+      - name: install datafold-sdk
+        run: pip install -i https://test.pypi.org/simple/ datafold-sdk==0.0.5
 
       - name: dbt deps
         run: dbt deps
@@ -51,7 +54,7 @@ jobs:
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload --ci-config-id 29 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
+          datafold dbt upload-and-wait --ci-config-id 29 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
           DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
