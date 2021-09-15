@@ -6,7 +6,7 @@ snowflake:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
 
       # User/password auth
-      user: fokko
+      user: demo_beers
       password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
 
       role: PUBLIC
