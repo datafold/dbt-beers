@@ -24,10 +24,6 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "target"
     - "dbt_modules"
 
-quoting:
-  database: true
-  schema: true
-  identifier: true
 
 seeds:
   beer_analytics:
