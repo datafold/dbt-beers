@@ -26,7 +26,7 @@ jobs:
 
       - name: dbt deps
         run: dbt deps
- 
+
       # - name: dbt seed
       #   run: dbt seed --full-refresh --profiles-dir ./
       #   env:
@@ -56,4 +56,4 @@ jobs:
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
+          SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS_LOWERCASE' || 'BEERS_LOWERCASE_DEV' }}"
