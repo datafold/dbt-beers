@@ -4,6 +4,8 @@
     transient=false
 ) }}
 
+
+
 SELECT
  beers_with_breweries.beer_id               AS beer_id,
  trim(beers_with_breweries.beer_name)       AS beer_name,
