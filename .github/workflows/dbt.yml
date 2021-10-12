@@ -39,7 +39,7 @@ jobs:
           echo "merge base: $MERGE_BASE"
           git checkout $MERGE_BASE
           git rev-parse
-          dbt compile --profiles-dir .
+          SNOWFLAKE_SCHEMA='BEERS' dbt compile --profiles-dir .
           mv target target_prod
           datafold dbt upload-and-wait --ci-config-id 34 --run-type production --target-folder ./target_prod/ --commit-sha ${MERGE_BASE}
           git checkout $HEAD
