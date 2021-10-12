@@ -41,11 +41,13 @@ jobs:
           git rev-parse
           dbt compile --profiles-dir .
           mv target target_prod
+          datafold dbt upload-and-wait --ci-config-id 34 --run-type production --target-folder ./target_prod/ --commit-sha ${MERGE_BASE}
           git checkout $HEAD
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
+          DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
 
       - name: dbt seed
         run: dbt seed --profiles-dir ./ --state target_prod --select state:modified+
@@ -71,7 +73,7 @@ jobs:
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload-and-wait --ci-config-id 29 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
+          datafold dbt upload-and-wait --ci-config-id 34 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
           DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
