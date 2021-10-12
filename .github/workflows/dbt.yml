@@ -27,22 +27,42 @@ jobs:
       - name: dbt deps
         run: dbt deps
 
+      - name: compile prod artifacts
+        run: |
+          set -x
+          git fetch
+          HEAD=$(git rev-parse HEAD)
+          PR_HEAD=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.head.sha)
+          MERGE_BASE=$(git merge-base $PR_HEAD origin/master)
+          echo "head: $HEAD"
+          echo "head: $PR_HEAD"
+          echo "merge base: $MERGE_BASE"
+          git checkout $MERGE_BASE
+          git rev-parse
+          dbt compile --profiles-dir .
+          mv target target_prod
+          git checkout $HEAD
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
+
       - name: dbt seed
-        run: dbt seed --full-refresh --profiles-dir ./
+        run: dbt seed --profiles-dir ./ --state target_prod --select state:modified+
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: dbt run
-        run: dbt run --profiles-dir ./
+        run: dbt run --profiles-dir ./ --state target_prod --defer --select state:modified+
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: dbt test
-        run: dbt test --profiles-dir ./
+        run: dbt test --profiles-dir ./ --state target_prod --defer --select state:modified+
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
