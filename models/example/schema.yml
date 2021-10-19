@@ -94,7 +94,8 @@ models:
       - name: brewery_name
         description: The official name of the brewery
       - name: brewery_city
-      - name: brewery_state
+      - name: "BreweryState"
+        quote: true
       - name: brewery_country
       - name: order_no
         description: The order number
