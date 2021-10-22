@@ -98,14 +98,9 @@ models:
       - name: brewery_country
       - name: order_no
         description: The order number
-        meta:
-          primary-key: true
-      - name: "OrderLine"
+      - name: order_line
         description: The order line number
-        meta:
-          primary-key: true
-        quote: true
-      - name: order_CREATED_at
+      - name: order_created_at
         description: When the order was created
       - name: order_li_quantity
         description: The number of units for the order line
@@ -113,3 +108,6 @@ models:
         description: Price for a single unit
       - name: order_li_price_total
         description: The total price for the order line
+    tests:
+      - unique:
+          column_name: "order_no || order_line"
