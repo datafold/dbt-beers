@@ -15,7 +15,7 @@ SELECT
  beers_with_breweries.brewery_id            AS brewery_id,
  beers_with_breweries.brewery_name          AS brewery_name,
  beers_with_breweries.brewery_city          AS brewery_city,
- beers_with_breweries.brewery_state         AS "BreweryState",
+ beers_with_breweries.brewery_state         AS brewery_state,
  beers_with_breweries.brewery_country       AS brewery_country,
 
  orders.order_no                            AS order_no,
