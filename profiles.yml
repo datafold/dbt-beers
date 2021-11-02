@@ -9,7 +9,7 @@ snowflake:
       user: demo_beers
       password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
 
-      role: PUBLIC
+      role: DATAFOLDROLE
       database: INTEGRATION
       warehouse: INTEGRATION
       schema: "{{ env_var('SNOWFLAKE_SCHEMA') | as_text }}"
