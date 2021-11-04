@@ -14,3 +14,19 @@ snowflake:
       warehouse: INTEGRATION
       schema: "{{ env_var('SNOWFLAKE_SCHEMA') | as_text }}"
       threads: 5
+
+production:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+
+      user: fokko
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
+
+      role: DATAFOLDROLE
+      database: INTEGRATION
+      warehouse: INTEGRATION
+      schema: BEERS
+      threads: 5
