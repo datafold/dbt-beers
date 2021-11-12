@@ -1,18 +1,33 @@
-snowflake:
+production:
   target: dev
   outputs:
     dev:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
 
-      # User/password auth
       user: fokko
       password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
 
       role: DATAFOLDROLE
       database: INTEGRATION
       warehouse: INTEGRATION
-      schema: "{{ env_var('SNOWFLAKE_SCHEMA') | as_text }}"
+      schema: BEERS
+      threads: 5
+
+development:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+
+      user: fokko
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
+
+      role: DATAFOLDROLE
+      database: INTEGRATION
+      warehouse: INTEGRATION
+      schema: BEERS_DEV
       threads: 5
 
 production:
