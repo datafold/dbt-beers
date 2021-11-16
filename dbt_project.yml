@@ -42,5 +42,5 @@ seeds:
 models:
   beer_analytics:
       # Applies to all files under models/example/
-      example:
+      beers:
           materialized: view
