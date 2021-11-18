@@ -32,11 +32,6 @@ seeds:
       +column_types:
         ibu: decimal
 
-quoting:
-  database: true
-  schema: true
-  identifier: true
-
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
