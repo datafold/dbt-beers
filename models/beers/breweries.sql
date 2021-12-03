@@ -11,5 +11,3 @@ SELECT
   'USA'                 AS brewery_country
 FROM
   {{ ref('seed_breweries') }}
-WHERE
-   trim(state) <> 'TX'
