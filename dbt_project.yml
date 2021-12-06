@@ -31,6 +31,7 @@ seeds:
     seed_beers:
       +column_types:
         ibu: decimal
+        abv: decimal
 
 
 # Configuring models
