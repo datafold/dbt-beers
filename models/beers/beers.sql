@@ -5,7 +5,7 @@
 
 SELECT
   id            AS beer_id,
-  TRIM(name)    AS beer_name,
+  TRIM(REGEXP_REPLACE(TRIM(beer_name), '\\([0-9]+\\)', '')))  AS beer_name,
   style         AS beer_style,
   abv           AS abv,
   ibu           AS ibu,
