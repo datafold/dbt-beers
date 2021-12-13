@@ -24,9 +24,6 @@ jobs:
       - name: install dbt
         run: pip install -q dbt-redshift==0.20.2 datafold-sdk==0.0.5
 
-      - name: dbt deps
-        run: dbt deps
-
       - name: dbt seed
         run: dbt seed --full-refresh --profiles-dir ./
         env:
