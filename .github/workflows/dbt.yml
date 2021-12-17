@@ -22,7 +22,10 @@ jobs:
           python-version: '3.8'
 
       - name: install dbt
-        run: pip install -q dbt==0.20.2 datafold-sdk==0.0.5
+        run: pip install -q dbt==0.20.2
+        
+      - name: install datafold
+        run: pip install -i https://test.pypi.org/simple/ datafold-sdk==0.0.7
 
       - name: dbt deps
         run: dbt deps
