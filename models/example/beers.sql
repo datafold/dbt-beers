@@ -11,5 +11,7 @@ SELECT
   ibu           AS ibu,
   brewery_id    AS brewery_id,
   ounces        AS ounces
+
+
 FROM
   {{ ref('seed_beers') }}
