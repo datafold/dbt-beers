@@ -42,6 +42,13 @@ models:
     columns:
       - name: beer_id
 
+  - name: beers_with_tags
+    meta:
+      primary-key:
+        - beer_id
+    columns:
+      - name: beer_id
+
   - name: breweries
     meta:
       primary-key:
