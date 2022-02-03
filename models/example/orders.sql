@@ -13,7 +13,7 @@ WITH generated_orders AS (
         {% for order_number in range(10) %}
           SELECT
              TO_VARCHAR(
-                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
+                DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE),
                 'YYYYMMDD{{ order_number }}'
              )::int                                                            AS order_no,
              {% if order_number is divisibleby 13 %}
@@ -21,7 +21,7 @@ WITH generated_orders AS (
              {% else %}
                 'DELIVERED'                                                    AS status,
              {% endif %}
-             DATEADD(Day, -1 * {{ day_ago }}, current_timestamp)               AS created_at,
+             DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE)                    AS created_at,
              current_timestamp                                                 AS changed_at
 
           {% if not loop.last %}
