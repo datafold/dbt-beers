@@ -22,7 +22,7 @@ WITH generated_orders AS (
                 'DELIVERED'                                                    AS status,
              {% endif %}
              DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE)                    AS created_at,
-             current_timestamp                                                 AS changed_at
+             CURRENT_DATE.                                                     AS changed_at
 
           {% if not loop.last %}
             UNION ALL
