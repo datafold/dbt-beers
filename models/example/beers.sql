@@ -3,7 +3,6 @@
     materialized="table"
 ) }}
 
-
 SELECT
   id            AS beer_id,
   TRIM(REGEXP_REPLACE(name, '\\([0-9]+\\)', '')) AS beer_name,
