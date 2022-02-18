@@ -28,5 +28,3 @@ SELECT
 FROM {{ ref('orders') }} orders
 JOIN {{ ref('order_lines') }} order_lines USING (order_no)
 JOIN {{ ref('beers_with_breweries') }} beers_with_breweries USING (beer_id)
-
-WHERE orders.status = 'DELIVERED'
