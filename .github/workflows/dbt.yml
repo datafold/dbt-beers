@@ -22,10 +22,7 @@ jobs:
           python-version: '3.8'
 
       - name: install dbt
-        run: pip install -q 'dbt==0.20.2' 'datafold-sdk==0.0.7'
-
-      - name: dbt deps
-        run: dbt deps
+        run: pip install -q 'dbt-snowflake' 'datafold-sdk==0.0.7'
 
       - name: dbt seed
         run: dbt seed --full-refresh --profiles-dir ./
