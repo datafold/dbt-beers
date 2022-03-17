@@ -22,7 +22,7 @@ jobs:
           python-version: '3.8'
 
       - name: install dbt
-        run: pip install -q 'dbt-core==1.0.3 dbt-snowflake' 'datafold-sdk==0.0.7' 'MarkupSafe==2.0.1'
+        run: pip install -q 'dbt-core==1.0.3' 'dbt-snowflake' 'datafold-sdk==0.0.7' 'MarkupSafe==2.0.1'
         
       - name: install dbt deps
         run: dbt deps
