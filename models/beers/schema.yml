@@ -117,3 +117,15 @@ models:
         description: Price for a single unit
       - name: order_li_price_total
         description: The total price for the order line
+
+  - name: promo_deliveries
+    tags:
+      - marketing
+    meta:
+      owner: gleb@datafold.com
+    columns:
+      - name: customer_id
+        description: Customer id
+        meta: 
+          primary-key: true
+

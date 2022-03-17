@@ -16,8 +16,11 @@ WHERE customer_id IN(
       JOIN {{ ref('beers') }} b
       USING(beer_id)
       GROUP BY 1
-      HAVING COUNT(CASE WHEN b.bitterness = 'Hoppy' THEN 1 END) >= 1)
-UNION ALL
+      HAVING COUNT(CASE WHEN b.bitterness = 'Hoppy' THEN 1 END)
+             >
+             COUNT(CASE WHEN b.bitterness = 'Malty' THEN 1 END))
+
+UNION
 
 SELECT
  customer_id,
@@ -31,4 +34,6 @@ WHERE customer_id IN(
       JOIN {{ ref('beers') }} b
       USING(beer_id)
       GROUP BY 1
-     HAVING COUNT(CASE WHEN b.bitterness = 'Malty' THEN 1 END) >= 1)
+      HAVING COUNT(CASE WHEN b.bitterness = 'Malty' THEN 1 END)
+             >
+             COUNT(CASE WHEN b.bitterness = 'Hoppy' THEN 1 END))
