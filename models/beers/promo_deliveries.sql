@@ -17,7 +17,8 @@ WHERE customer_id IN(
       USING(beer_id)
       GROUP BY 1
       HAVING COUNT(CASE WHEN b.bitterness = 'Hoppy' THEN 1 END) >= 1)
-UNION ALL
+
+UNION
 
 SELECT
  customer_id,
