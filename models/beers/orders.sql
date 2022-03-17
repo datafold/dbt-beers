@@ -16,6 +16,9 @@ WITH generated_orders AS (
                 DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE),
                 'YYYYMMDD{{ order_number }}'
              )::int                                                            AS order_no,
+             
+             UNIFORM(123456,654321, RANDOM())                                  AS customer_id,
+
              {% if order_number is divisibleby 13 %}
                 'PENDING'                                                      AS status,
              {% else %}
