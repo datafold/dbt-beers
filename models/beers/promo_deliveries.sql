@@ -5,7 +5,8 @@
 ) }}
 
 SELECT customer_id,
-       'Hoppy' AS promo    
+       'Hoppy' AS promo,
+       COUNT(DISTINCT b.beer_name) AS cnt_beers_purchased    
   FROM {{ ref('orders') }} o
   JOIN {{ ref('order_lines') }} ol
   USING (order_no)
@@ -19,7 +20,8 @@ SELECT customer_id,
 UNION
 
 SELECT customer_id,
-       'Malty' AS promo
+       'Malty' AS promo,
+       COUNT(DISTINCT b.beer_name) AS cnt_beers_purchased
   FROM {{ ref('orders') }} o
   JOIN {{ ref('order_lines') }} ol
   USING (order_no)
