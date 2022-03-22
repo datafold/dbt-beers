@@ -45,8 +45,11 @@ models:
 
     columns:
       - name: beer_id
+        tests:
+          - unique
+          - not_null
         meta:
-         primary-key: true
+          primary-key: true
          
       - name: beer_id
         description: The unique indentifier of the beer

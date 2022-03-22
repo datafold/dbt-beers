@@ -1,4 +1,4 @@
-name: dbt + datafold
+name: dbt build & test
 
 on:
   push:
