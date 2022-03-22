@@ -31,3 +31,4 @@ SELECT customer_id,
   HAVING COUNT(CASE WHEN b.bitterness = 'Malty' THEN 1 END)
          >
          COUNT(CASE WHEN b.bitterness = 'Hoppy' THEN 1 END)
+
