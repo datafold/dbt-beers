@@ -45,6 +45,9 @@ models:
 
     columns:
       - name: beer_id
+        tests:
+          - unique
+          - not_null
         meta:
           primary-key: true
          
