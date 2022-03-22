@@ -19,3 +19,4 @@ SELECT
   ounces        AS ounces
 FROM
   {{ ref('seed_beers') }}
+
