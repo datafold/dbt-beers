@@ -32,3 +32,4 @@ SELECT customer_id,
          >
          COUNT(CASE WHEN b.bitterness = 'Hoppy' THEN 1 END)
 
+
