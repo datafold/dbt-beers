@@ -18,8 +18,8 @@ WITH generated_orders AS (
                  {% endcall %},
                  '{{ order_number }}'
              )::int                                                            AS order_no,
-             
-             UNIFORM(123456,654321, RANDOM())                                  AS customer_id,
+
+             {{ randint(123456, 654321) }}                                  AS customer_id,
 
              {% if order_number is divisibleby 13 %}
                 'PENDING'                                                      AS status,
