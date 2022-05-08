@@ -14,17 +14,15 @@ WITH generated_order_lines AS (
             -- Each order has between 1 and 5 order_lines
             {% for order_line in range(3) %}
                 SELECT CONCAT(
-                            {{ date_format() }}(
-                                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
-                                'YYYYMMDD'
-                            ),
+                            {% call date_as_yyyymmdd() %}
+                                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp)
+                            {% endcall %},
                             '{{ order_number }}'
                        )                                   AS order_no,
                        CONCAT(
-                           {{ date_format() }}(
-                                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
-                                'YYYYMMDD'
-                           ),
+                           {% call date_as_yyyymmdd() %}
+                                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp)
+                           {% endcall %},
                            '{{ order_number }}{{ order_line }}'
                        ) AS order_line,
                        (
