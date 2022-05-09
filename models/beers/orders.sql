@@ -13,10 +13,11 @@ WITH generated_orders AS (
         {% for order_number in range(10) %}
           SELECT
               CONCAT(
-                 {% call date_as_yyyymmdd() %}
-                     DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE)
-                 {% endcall %},
-                 '{{ order_number }}'
+                   {{ date_format() }}(
+                        DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE),
+                        {{ yyymmdd() }}
+                   ),
+                   '{{ order_number }}'
              )::int                                                            AS order_no,
 
              {{ randint(123456, 654321) }}                                  AS customer_id,
