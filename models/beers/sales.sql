@@ -10,6 +10,7 @@ SELECT
  beers_with_breweries.beer_style            AS beer_style,
  beers_with_breweries.abv                   AS abv,
  beers_with_breweries.ibu                   AS ibu,
+ beers_with_breweries.bitterness            AS bitterness,
  beers_with_breweries.ounces                AS ounces,
 
  beers_with_breweries.brewery_id            AS brewery_id,
