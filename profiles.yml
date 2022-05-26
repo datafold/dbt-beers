@@ -22,7 +22,7 @@ production:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
 
-      user: fokko
+      user: "{{ env_var('SNOWFLAKE_USER') | as_text }}"
       password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
 
       role: DATAFOLDROLE
