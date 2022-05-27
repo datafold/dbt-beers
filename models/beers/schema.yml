@@ -27,7 +27,7 @@ models:
       - name: ibu
         description: The bitterness of the beer in IBUs
       - name: bitterness
-        description: The bitterness category of the beer
+        description: The bitterness category of the beer (based on IBUs)
       - name: ounces
         description: The volume of the beer
       - name: brewery_name
@@ -67,7 +67,7 @@ models:
         description: Bitterness in International Bitterness Units
 
       - name: bitterness
-        description: Assigned bitterness category
+        description: The bitterness category of the beer (based on IBUs)
 
       - name: brewery_id
         description: The unique indentifier of the beer
@@ -120,6 +120,8 @@ models:
         description: Alcohol by volume
       - name: ibu
         description: International Bitterness Unit
+      - name: bitterness
+        description: The bitterness category of the beer (based on IBUs)
       - name: ounces
         description: Volume of a single unit
       - name: brewery_id
