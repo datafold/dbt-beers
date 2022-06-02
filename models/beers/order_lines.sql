@@ -13,14 +13,20 @@ WITH generated_order_lines AS (
         {% for order_number in range(10) %}
             -- Each order has between 1 and 5 order_lines
             {% for order_line in range(3) %}
-                SELECT TO_VARCHAR(
-                            DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
-                            'YYYYMMDD{{ order_number }}'
+                SELECT CONCAT(
+                            {{ date_format() }}(
+                                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
+                                {{ yyymmdd() }}
+                            ),
+                            '{{ order_number }}'
                        )                                   AS order_no,
-                       TO_VARCHAR(
-                            DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
-                            'YYYYMMDD{{ order_number }}{{ order_line }}'
-                       )                                   AS order_line,
+                       CONCAT(
+                           {{ date_format() }}(
+                                DATEADD(Day, -1 * {{ day_ago }}, current_timestamp),
+                                {{ yyymmdd() }}
+                           ),
+                           '{{ order_number }}{{ order_line }}'
+                       ) AS order_line,
                        (
                             -- Deterministically select a random beer
                             SELECT MOD(
