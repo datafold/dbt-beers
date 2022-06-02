@@ -1,4 +1,4 @@
-name: dbt + datafold
+name: dbt build & test
 
 on:
   push:
@@ -22,15 +22,16 @@ jobs:
           python-version: '3.8'
 
       - name: install dbt
-        run: pip install -q 'dbt==0.20.2' 'datafold-sdk==0.0.7'
-
-      - name: dbt deps
+        run: pip install -q 'dbt-core==1.0.3' 'dbt-snowflake' 'datafold-sdk==0.0.12' 'MarkupSafe==2.0.1'
+        
+      - name: install dbt deps
         run: dbt deps
 
       - name: dbt seed
         run: dbt seed --full-refresh --profiles-dir ./
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
@@ -38,13 +39,14 @@ jobs:
         run: dbt run --full-refresh --profiles-dir ./
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: submit artifacts to datafold
         run: |
           set -ex
-          datafold dbt upload --ci-config-id 37 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
+          datafold dbt upload --ci-config-id 77 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
           DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
@@ -54,5 +56,6 @@ jobs:
         run: dbt test --profiles-dir ./
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"

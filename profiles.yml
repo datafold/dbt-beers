@@ -6,7 +6,7 @@ snowflake:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
 
       # User/password auth
-      user: fokko
+      user: "{{ env_var('SNOWFLAKE_USER') | as_text }}"
       password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
 
       role: DATAFOLDROLE
@@ -15,6 +15,16 @@ snowflake:
       schema: "{{ env_var('SNOWFLAKE_SCHEMA') | as_text }}"
       threads: 5
 
+databricks:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      schema: beers
+      host: "{{ env_var('DATABRICKS_HOST') | as_text }}"
+      http_path: "{{ env_var('DATABRICKS_PATH') | as_text }}"
+      token: "{{ env_var('DATABRICKS_TOKEN') | as_text }}"
+
 production:
   target: dev
   outputs:
@@ -22,7 +32,7 @@ production:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
 
-      user: fokko
+      user: "{{ env_var('SNOWFLAKE_USER') | as_text }}"
       password: "{{ env_var('SNOWFLAKE_PASSWORD') | as_text }}"
 
       role: DATAFOLDROLE

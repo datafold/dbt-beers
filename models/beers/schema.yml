@@ -25,7 +25,9 @@ models:
       - name: abv
         description: Alcohol percentage in the beer
       - name: ibu
-        description: The bitterness of the beer
+        description: The bitterness of the beer in IBUs
+      - name: bitterness
+        description: The bitterness category of the beer (based on IBUs)
       - name: ounces
         description: The volume of the beer
       - name: brewery_name
@@ -36,38 +38,69 @@ models:
         description: State of the brewery
 
   - name: beers
-    meta:
-      primary-key:
-        - beer_id
+    description: Beers description
+    tags: 
+      - products
+      - sales
+
     columns:
       - name: beer_id
+        tests:
+          - unique
+          - not_null
+        meta:
+          primary-key: true
+         
+      - name: beer_id
+        description: The unique indentifier of the beer
+
+      - name: beer_name
+        description: The name of the beer as on the label
+
+      - name: beer_style
+        description: The style of the beer (IPA, Porter, etc) 
+
+      - name: abv
+        description: Alcohol by volume
+
+      - name: ibu
+        description: Bitterness in International Bitterness Units
+
+      - name: bitterness
+        description: The bitterness category of the beer (based on IBUs)
+
+      - name: brewery_id
+        description: The unique indentifier of the beer
+      
+      - name: ounces
+        description: Volume of a single unit
+
 
   - name: breweries
-    meta:
-      primary-key:
-        - brewery_id
     columns:
       - name: brewery_id
+        meta:
+         primary-key: true
 
   - name: orders
-    meta:
-      primary-key:
-        - order_no
     columns:
       - name: order_no
+        meta:
+         primary-key: true
 
   - name: order_lines
-    meta:
-      primary-key:
-        - order_no
-        - order_line
     columns:
       - name: order_no
+        meta:
+         primary-key: true
         tests:
           - relationships:
               to: ref('orders')
               field: order_no
+
       - name: order_line
+        meta:
+         primary-key: true
         tests:
           - unique
 
@@ -87,6 +120,8 @@ models:
         description: Alcohol by volume
       - name: ibu
         description: International Bitterness Unit
+      - name: bitterness
+        description: The bitterness category of the beer (based on IBUs)
       - name: ounces
         description: Volume of a single unit
       - name: brewery_id
@@ -116,8 +151,15 @@ models:
         description: Price for a single unit
       - name: order_li_price_total
         description: The total price for the order line
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - order_no
-            - order_line
+
+  - name: promo_deliveries
+    tags:
+      - marketing
+    meta:
+      owner: gleb@datafold.com
+    columns:
+      - name: customer_id
+        description: Customer id
+        meta: 
+          primary-key: true
+
