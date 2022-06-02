@@ -10,6 +10,7 @@ SELECT
   abv           AS abv,
   ibu           AS ibu,
   CASE 
+       WHEN ibu <= 25 THEN 'Super Malty'
        WHEN ibu <= 50 THEN 'Malty'
        WHEN ibu > 50 THEN 'Hoppy'
    END AS bitterness,
