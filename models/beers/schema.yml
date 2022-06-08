@@ -43,6 +43,11 @@ models:
       - products
       - sales
 
+    meta:
+      datafold:
+        datadiff:
+          filter: "beer_id > 2350"
+
     columns:
       - name: beer_id
         tests:
