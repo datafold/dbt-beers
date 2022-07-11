@@ -18,7 +18,7 @@ SELECT {{ date_format() }}(
        )                                                   AS order_no,
        {{ date_format() }}(
            DATEADD(Day, -1 *  day_ago, current_timestamp),
-           CONCAT('YYYYMMDD', cast(order_number as varchar),cast(line_no))
+           CONCAT('YYYYMMDD', cast(order_number as varchar),cast(line_no as varchar))
        )                                                   AS order_line,
        (
        -- Deterministically select a random beer
