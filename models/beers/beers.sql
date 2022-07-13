@@ -10,8 +10,8 @@ SELECT
   abv           AS abv,
   ibu           AS ibu,
   CASE 
-       WHEN ibu <= 20 THEN 'Extra Malty'
-       WHEN ibu <= 40 THEN 'Malty'
+       WHEN ibu <= 15 THEN 'Extra Malty'
+       WHEN ibu <= 30 THEN 'Malty'
        WHEN ibu <= 60 THEN 'Well Balanced'
        WHEN ibu <= 80 THEN 'Hoppy'
        WHEN ibu > 80 THEN 'Extra Hoppy'
