@@ -8,7 +8,6 @@ SELECT
   TRIM(name)    AS beer_name,
   style         AS beer_style,
   abv           AS abv,
-  ibu           AS ibu_value,
   CASE 
        WHEN ibu <= 12 THEN 'Extra Malty'
        WHEN ibu <= 32 THEN 'Malty'
