@@ -6,7 +6,7 @@
 SELECT
   id            AS beer_id,
   TRIM(name)    AS beer_name,
-  style         AS beer_style,
+  style         AS beer_TYPE,
   abv           AS abv,
   ibu           AS ibu,
   CASE 
