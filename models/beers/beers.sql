@@ -10,10 +10,11 @@ SELECT
   abv           AS abv,
   ibu           AS ibu,
   CASE 
-       WHEN ibu <= 50 THEN 'Malty'
-       WHEN ibu > 50 THEN 'Hoppy'
+       WHEN ibu < 50 THEN 'Malty'
+       WHEN ibu >= 50 THEN 'Hoppy'
    END AS bitterness,
   brewery_id    AS brewery_id,
   ounces        AS ounces
+  ounces*29.57  AS ml
 FROM
   {{ ref('seed_beers') }}
