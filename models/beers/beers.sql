@@ -18,6 +18,5 @@ SELECT
   END AS bitterness,
   brewery_id    AS brewery_id,
   ounces        AS ounces
-  ounces*28.57  AS ml
 FROM
   {{ ref('seed_beers') }}
