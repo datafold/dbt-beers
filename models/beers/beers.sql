@@ -10,20 +10,14 @@ SELECT
   abv           AS abv,
   ibu           AS ibu,
   CASE 
-       WHEN ibu <= 12 THEN 'Extra Malty'
-       WHEN ibu <= 32 THEN 'Malty'
-       WHEN ibu <= 52 THEN 'Well Balanced'
-       WHEN ibu <= 82 THEN 'Hoppy'
-       WHEN ibu > 82 THEN 'Extra Hoppy'
-   END AS bitterness,
-    CASE 
-       WHEN ibu <= 10 THEN 'Extra Malty'
+       WHEN ibu <= 15 THEN 'Extra Malty'
        WHEN ibu <= 30 THEN 'Malty'
-       WHEN ibu <= 60 THEN 'Well Balanced'
-       WHEN ibu <= 90 THEN 'Hoppy'
-       WHEN ibu > 90 THEN 'Extra Hoppy'
-   END AS differnt_bitterness,
+       WHEN ibu <= 50 THEN 'Well Balanced'
+       WHEN ibu <= 80 THEN 'Hoppy'
+       WHEN ibu > 80 THEN 'Extra Hoppy'
+  END AS bitterness,
   brewery_id    AS brewery_id,
-  ounces*2        AS ounces
+  ounces        AS ounces
+  ounces*28.57  AS ml
 FROM
   {{ ref('seed_beers') }}
