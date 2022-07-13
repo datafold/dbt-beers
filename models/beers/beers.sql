@@ -24,6 +24,6 @@ SELECT
        WHEN ibu > 90 THEN 'Extra Hoppy'
    END AS differnt_bitterness,
   brewery_id    AS brewery_id,
-  ounces        AS ounces
+  ounces*2        AS ounces
 FROM
   {{ ref('seed_beers') }}
