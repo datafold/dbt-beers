@@ -10,11 +10,11 @@ SELECT
   abv           AS abv,
   ibu           AS ibu,
   CASE 
-       WHEN ibu <= 15 THEN 'Extra Malty'
-       WHEN ibu <= 30 THEN 'Malty'
-       WHEN ibu <= 50 THEN 'Well Balanced'
-       WHEN ibu <= 80 THEN 'Hoppy'
-       WHEN ibu > 80 THEN 'Extra Hoppy'
+       WHEN ibu <= 12 THEN 'Extra Malty'
+       WHEN ibu <= 32 THEN 'Malty'
+       WHEN ibu <= 52 THEN 'Well Balanced'
+       WHEN ibu <= 82 THEN 'Hoppy'
+       WHEN ibu > 82 THEN 'Extra Hoppy'
    END AS bitterness,
   brewery_id    AS brewery_id,
   ounces        AS ounces
