@@ -32,7 +32,7 @@ SELECT {{ date_format() }}(
        1 +MOD(ABS(HASH( order_number + line_no )), 3)      AS quantity,
        MOD(ABS(HASH( order_number + line_no )), 300) / 100 AS price,
        convert_timezone('America/New_York', 'America/Los_Angeles', (DATEADD(Day, -1 *  day_ago , current_timestamp))) AS created_at,
-       current_timestamp                                   AS changed_at
+       convert_timezone('America/New_York', 'America/Los_Angeles', current_timestamp)                                 AS changed_at
 
 
 from
