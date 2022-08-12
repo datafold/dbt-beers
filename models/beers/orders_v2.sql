@@ -21,6 +21,27 @@ with dates as ( --generate dates for the last year
     ,dayofweek(_date) as day_of_week
     ,dayofyear(_date) as day_of_year
     ,_date - '2021-01-01'::date as increasing_constant
+    --beer holidays
+    ,to_char(_date,'mm-dd') in (
+        '03-17' --St Patrick's
+        ,'07-04' --4th of July
+        ,'11-24' --Thanksgiving
+        ,'12-25' --Christmas
+        ,'12-31' --New Year's
+    ) as is_beer_holiday
+    ,case --beer orders increase preceeding beer holidays
+        when is_beer_holiday then 10
+        when lag(is_beer_holiday,-1) over (order by _date) then 9
+        when lag(is_beer_holiday,-2) over (order by _date) then 8
+        when lag(is_beer_holiday,-3) over (order by _date) then 7
+        when lag(is_beer_holiday,-4) over (order by _date) then 6
+        when lag(is_beer_holiday,-5) over (order by _date) then 5
+        when lag(is_beer_holiday,-6) over (order by _date) then 4
+        when lag(is_beer_holiday,-7) over (order by _date) then 3
+        when lag(is_beer_holiday,-8) over (order by _date) then 2
+        when lag(is_beer_holiday,-9) over (order by _date) then 1
+        else 0
+    end as beer_holiday_constant
     --generate seasonal data using cosine
     ,500 as mean
     ,1000 as offset
@@ -31,12 +52,9 @@ with dates as ( --generate dates for the last year
     ,normal(noise_mean,noise_var,random()) as noise --normally distributed random #s
     ,cycle 
             + noise
-            --add date constants to have sales increase over the course of the year
-            + day_of_week
-            + week_of_year
-            + month_of_year * 200
-            + quarter_of_year
-            + increasing_constant --up and to the right constant
+            + month_of_year * 200 --increase orders over the course of the year
+            + beer_holiday_constant * 150 --increase orders around holidays
+            + increasing_constant
         as seed_data_point
     from dates
 )
@@ -75,7 +93,8 @@ orders.order_date
 ,beers.beer_id
 ,beers.beer_name
 ,beers.beer_style
-,abv as beer_abv
+,beers.abv as beer_abv
+,beers.bitterness
 ,breweries.brewery_id
 ,breweries.brewery_name
 ,breweries.brewery_state
