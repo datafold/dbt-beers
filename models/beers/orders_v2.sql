@@ -21,14 +21,13 @@ with dates as ( --generate dates for the last year
     ,dayofweek(_date) as day_of_week
     ,dayofyear(_date) as day_of_year
     ,_date - '2021-01-01'::date as increasing_constant
-    
+    --generate seasonal data using cosine
     ,500 as mean
     ,1000 as offset
     ,cos(day_of_year/365*52*pi()- pi() ) * mean + offset as cycle
-    
+    --add noise to seasonal data using normal function
     ,100 as noise_mean
     ,250 as noise_var
-    
     ,normal(noise_mean,noise_var,random()) as noise --normally distributed random #s
     ,cycle 
             + noise
