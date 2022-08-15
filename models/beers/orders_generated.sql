@@ -54,7 +54,7 @@ with dates as ( --generate dates for the last year
             + noise
             + month_of_year * 200 --increase orders over the course of the year
             + beer_holiday_constant * 150 --increase orders around holidays
-            + increasing_constant
+            + increasing_constant --general increase over time
         as seed_data_point
     from dates
 )

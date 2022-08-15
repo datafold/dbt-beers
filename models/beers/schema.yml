@@ -88,6 +88,16 @@ models:
         meta:
          primary-key: true
 
+  - name: orders_generated
+    description: Randomly generated order data
+    columns:
+      - name: order_number
+        tests:
+          - unique
+          - not_null
+        meta:
+         primary-key: true
+
   - name: order_lines
     columns:
       - name: order_no
