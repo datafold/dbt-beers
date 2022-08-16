@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          # We need to checkout full git tree to be able to find and checkout
+          # the merge-base. By default the action checks out only PR HEAD commit.
+          fetch-depth: 0
 
       - uses: actions/setup-python@v2
         with:
@@ -47,10 +51,29 @@ jobs:
         run: |
           set -ex
           datafold dbt upload --ci-config-id 77 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${GIT_SHA}
+
+          # Switch to "merge base" commit
+          export PR_COMMIT=$(git rev-parse HEAD)
+          export MERGE_BASE=$(git merge-base origin/master HEAD)
+          echo "merge base is $MERGE_BASE"
+          git checkout $MERGE_BASE
+
+          # Do compile of the "merge base" in prod environment
+          export SNOWFLAKE_SCHEMA=BEERS
+          dbt compile --full-refresh --profiles-dir ./
+          datafold dbt upload --ci-config-id 77 --run-type production --target-folder ./target/ --commit-sha ${MERGE_BASE}
+
+          # Switch back to the HEAD of the current PR in case later stages
+          # do something with the repo.
+          git checkout $PR_COMMIT
         env:
           DATAFOLD_APIKEY: ${{ secrets.DATAFOLD_APIKEY }}
           DATAFOLD_RUN_TYPE: "${{ github.ref == 'refs/heads/master' && 'production' || 'pull_request' }}"
           GIT_SHA: "${{ github.ref == 'refs/heads/master' && github.sha || github.event.pull_request.head.sha }}"
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: dbt test
         run: dbt test --profiles-dir ./
