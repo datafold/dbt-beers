@@ -52,9 +52,13 @@ with dates as ( --generate dates for the last year
     ,normal(noise_mean,noise_var,random()) as noise --normally distributed random #s
     ,cycle 
             + noise
-            + month_of_year * 200 --increase orders over the course of the year
+            + month_of_year * 150 --increase orders over the course of the year
             + beer_holiday_constant * 150 --increase orders around holidays
             + increasing_constant --general increase over time
+            + case --new years smoothing
+                when day_of_year between 1 and 15 then 1000
+                when day_of_year between 16 and 40 then 500
+                else 0 end
         as seed_data_point
     from dates
 )
