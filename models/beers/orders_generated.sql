@@ -4,21 +4,21 @@
 ) }}
 
 
-with dates as ( --generate dates for the last year
+with dates as ( --generate dates for the last 90 days
   select
   dateadd(day,-seq4(),current_date) as _date
-  from table(generator(rowcount => (365
+  from table(generator(rowcount => (90
                                    )))
 )
 
-,generate_seasonal_data as (
+,date_detail as (
     select
     _date
     --date parts
     ,quarter(_date) as quarter_of_year
     ,month(_date) as month_of_year
     ,weekofyear(_date) as week_of_year
-    ,dayofweek(_date) as day_of_week
+    ,dayofweekiso(_date) as day_of_week
     ,dayofyear(_date) as day_of_year
     ,_date - '2021-01-01'::date as increasing_constant
     --beer holidays
@@ -42,32 +42,41 @@ with dates as ( --generate dates for the last year
         when lag(is_beer_holiday,-9) over (order by _date) then 1
         else 0
     end as beer_holiday_constant
-    --generate seasonal data using cosine
-    ,500 as mean
-    ,1000 as offset
-    ,cos(day_of_year/365*52*pi()- pi() ) * mean + offset as cycle
-    --add noise to seasonal data using normal function
-    ,100 as noise_mean
-    ,250 as noise_var
-    ,normal(noise_mean,noise_var,random()) as noise --normally distributed random #s
-    ,cycle 
-            + noise
-            + month_of_year * 150 --increase orders over the course of the year
-            + beer_holiday_constant * 150 --increase orders around holidays
-            + increasing_constant --general increase over time
-            + case --new years smoothing
-                when day_of_year between 1 and 15 then 1000
-                when day_of_year between 16 and 40 then 500
-                else 0 end
-        as seed_data_point
     from dates
+)
+
+,generate_seasonal_data as ( --generate seasonal data using cosine
+    select *
+    ,1000 as mean
+    ,2000 as offset
+    ,cos(day_of_year/365*2*pi() - pi()) * mean + offset as cycle --summer peak
+    from date_detail
+)
+
+,generate_noise as (
+    select *
+    ,0 as noise_mean
+    ,50 as noise_var
+    ,normal(noise_mean,noise_var,random()) as noise --normally distributed random #s
+    from generate_seasonal_data
+)
+
+,assemble_data as (
+    select
+    _date
+    ,cycle
+        + noise
+        + day_of_week * 75 --day of week variance, increase Monday --> Sunday
+        + beer_holiday_constant * 100 --increase orders around holidays
+        as seed_data_point
+    from generate_noise
 )
 
 ,daily_total_orders as (
     select
     _date as order_date
     ,seed_data_point::int as total_orders
-    from generate_seasonal_data
+    from assemble_data
 )
 
 ,row_numbers as ( --generate a row numbers to be used to construct orders table
