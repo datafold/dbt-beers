@@ -1,0 +1,42 @@
+version: 2.1
+
+jobs:
+  beers-ci:
+    docker:
+      - image: cimg/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: "Install DBT"
+          command: pip install -q 'dbt-core==1.0.3' 'dbt-snowflake' 'datafold-sdk==0.0.12' 'MarkupSafe==2.0.1'
+      - run:
+          name: "Install DBT Dependencies"
+          command: dbt deps
+      - run:
+          # CircleCI does not support separate jobs/workflows for pull request vs. merges
+          # Make sure to enable "only build pull requests" https://circleci.com/docs/oss#only-build-pull-requests
+          # This will run CI only for pull requests and commits to the default branch
+          # https://discuss.circleci.com/t/is-it-possible-to-run-workflows-when-github-prs-are-opened/38106
+          # Add environment variables in the CircleCI interface (SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, DATAFOLD_API_KEY)
+          name: "Run dbt and datafold"
+          command: |
+            if [ -z "${CIRCLE_PULL_REQUEST##*/}" ]
+            then
+              echo Setting variables for a merge to main
+              export SNOWFLAKE_SCHEMA=BEERS_CIRCLE_CI
+              export DATAFOLD_RUN_TYPE=production
+            else
+              echo Setting variables for a pull request
+              export SNOWFLAKE_SCHEMA=BEERS_DEV_CIRCLE_CI
+              export DATAFOLD_RUN_TYPE=pull_request
+            fi
+            dbt seed --full-refresh --profiles-dir ./
+            dbt run --full-refresh --profiles-dir ./
+            set -ex
+            datafold dbt upload --ci-config-id 99999 --run-type ${DATAFOLD_RUN_TYPE} --target-folder ./target/ --commit-sha ${CIRCLE_SHA1}
+            dbt test --profiles-dir ./
+
+workflows:
+  beers-ci-workflow:
+    jobs:
+      - beers-ci
