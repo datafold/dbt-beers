@@ -23,7 +23,7 @@ WITH generated_orders AS (
              {{ randint(123456, 654321) }}                                  AS customer_id,
 
              {% if order_number is divisibleby 13 %}
-                'PENDING'                                                      AS status,
+                'PENDING!'                                                      AS status,
              {% else %}
                 'DELIVERED'                                                    AS status,
              {% endif %}
