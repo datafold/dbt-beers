@@ -25,7 +25,7 @@ WITH generated_orders AS (
              {% if order_number is divisibleby 13 %}
                 'PENDING'                                                      AS status,
              {% else %}
-                'DELIVERED??'                                                    AS status,
+                'DELIVERED???'                                                    AS status,
              {% endif %}
              DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE)                    AS created_at,
              current_timestamp                                                 AS changed_at
