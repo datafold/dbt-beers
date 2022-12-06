@@ -45,8 +45,4 @@ models:
     # Applies to all files under models/example/
     beers:
       +materialized: view
-      sub_dir:
-        +meta:
-          datafold:
-            datadiff:
-              slim_ci: modified+
+
