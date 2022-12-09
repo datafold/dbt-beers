@@ -42,6 +42,11 @@ seeds:
 # using the `{{ config(...) }}` macro.
 models:
   beer_analytics:
-      # Applies to all files under models/example/
-      beers:
-          materialized: view
+    # Applies to all files under models/example/
+    beers:
+      +materialized: view
+      sales:
+        +meta:
+          datafold:
+            datadiff:
+              slim_ci: modified+
