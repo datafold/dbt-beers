@@ -3,6 +3,11 @@ version: 2
 models:
   - name: beers_with_breweries
     description: Beers joined with their breweries
+    meta:
+      datafold:
+        datadiff:
+          slim_diff: diff_when_downstream
+            
     columns:
       - name: brewery_id
         description: "The unique identifier for the brewery"
