@@ -45,3 +45,8 @@ models:
     # Applies to all files under models/example/
     beers:
       +materialized: view
+      sales:
+        +meta:
+          datafold:
+            datadiff:
+              slim_diff: diff_when_downstream
