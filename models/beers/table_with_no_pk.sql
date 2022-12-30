@@ -1,7 +1,5 @@
 {{ config(
     materialized='table',
-    unique_key='order_no',
-4
     persist_docs={"relation": true, "columns": true}
 ) }}
 
