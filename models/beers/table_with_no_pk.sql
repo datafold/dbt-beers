@@ -12,7 +12,7 @@ WITH generated_orders AS (
                         DATEADD(Day, -1 * {{ day_ago }}, CURRENT_DATE),
                         {{ yyymmdd() }}
                    ),
-                   '11'
+                   '22'
              )::int                                                            AS order_no,
 
 
