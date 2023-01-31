@@ -50,9 +50,7 @@ models:
           - not_null
         meta:
           primary-key: true
-         
-      - name: beer_id
-        description: The unique indentifier of the beer
+        tags: ['primary-key']
 
       - name: beer_name
         description: The name of the beer as on the label
@@ -81,12 +79,14 @@ models:
       - name: brewery_id
         meta:
          primary-key: true
+        tags: ['primary-key']
 
   - name: orders
     columns:
       - name: order_no
         meta:
          primary-key: true
+        tags: ['primary-key']
 
   - name: orders_generated
     description: Randomly generated order data
@@ -97,6 +97,7 @@ models:
           - not_null
         meta:
          primary-key: true
+        tags: ['primary-key']
 
   - name: order_lines
     columns:
@@ -172,4 +173,5 @@ models:
         description: Customer id
         meta: 
           primary-key: true
+        tags: ['primary-key']
 

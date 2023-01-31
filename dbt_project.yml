@@ -23,7 +23,11 @@ target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
     - "target"
     - "dbt_modules"
-
+vars:
+  data_diff:
+    prod_schema: BEERS
+    prod_database: INTEGRATION
+    datasource_id: 4233
 
 seeds:
   beer_analytics:
