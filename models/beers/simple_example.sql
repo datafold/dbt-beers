@@ -1,3 +1,5 @@
+{{ config(schema='test_custom_schema') }}
+
 select
 1 as id
 ,'a' as data_col
