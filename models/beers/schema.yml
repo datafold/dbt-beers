@@ -16,6 +16,7 @@ models:
           - not_null
         meta:
           primary-key: true
+        tags: ['primary-key']
       - name: beer_name
         description: The name of the beer
         meta:
@@ -36,7 +37,10 @@ models:
         description: City of the brewery
       - name: brewery_state
         description: State of the brewery
-
+  - name: beers_downstream
+    columns:
+      - name: beer_id
+        tags: ['primary-key']
   - name: beers
     description: Beers description
     tags: 
@@ -175,3 +179,12 @@ models:
           primary-key: true
         tags: ['primary-key']
 
+  - name: simple_example
+    columns:
+      - name: id
+        tags: ['primary-key']
+
+  - name: simple_example_downstream
+    columns:
+      - name: id
+        tags: ['primary-key']
