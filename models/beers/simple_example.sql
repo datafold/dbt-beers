@@ -6,4 +6,4 @@ UNION ALL
 
 select
 2 as id,
-'b' as data_col
+'c' as data_col
