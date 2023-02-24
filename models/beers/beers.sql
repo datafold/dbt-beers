@@ -18,3 +18,4 @@ SELECT
 FROM
   {{ ref('seed_beers') }}
 
+LIMIT 10
