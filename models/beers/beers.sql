@@ -14,6 +14,7 @@ SELECT
        WHEN ibu > 40 THEN 'Hoppy'
    END AS bitterness,
   brewery_id    AS brewery_id,
-  ounces        AS ounces
+  ounces        AS ounces,
+  1 AS const
 FROM
   {{ ref('seed_beers') }}
