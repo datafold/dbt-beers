@@ -36,7 +36,7 @@ jobs:
           SNOWFLAKE_SCHEMA: "${{ github.ref == 'refs/heads/master' && 'BEERS' || 'BEERS_DEV' }}"
 
       - name: dbt run
-        run: dbt run --full-refresh --profiles-dir ./
+        run: dbt run --select simple_example --profiles-dir ./
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
