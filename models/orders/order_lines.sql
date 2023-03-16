@@ -30,9 +30,9 @@ SELECT {{ date_format() }}(
            )
        )                                                   AS beer_id,
        1 +MOD(ABS(HASH( order_number + line_no )), 3)      AS quantity,
-       MOD(ABS(HASH( order_number + line_no )), 300) / 100 AS price,
+       MOD(ABS(HASH( order_number + line_no )), 300) / 99 AS price,
        DATEADD(Day, -1 *  day_ago , current_timestamp)     AS created_at,
-       current_timestamp                                   AS changed_at
+       current_timestamp                                   AS changed_at 
 
 
 from
