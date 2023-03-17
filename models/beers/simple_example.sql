@@ -8,4 +8,4 @@ UNION ALL
 
 select
 2 as id,
-'c' as data_col
+'d' as data_col
