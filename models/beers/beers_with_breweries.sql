@@ -6,3 +6,4 @@
 SELECT *
 FROM {{ ref('beers') }} beers
 JOIN {{ ref('breweries') }} breweries USING (brewery_id)
+limit 5
