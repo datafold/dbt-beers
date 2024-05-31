@@ -195,8 +195,8 @@ exposures:
     label: Beers List Report
     
     owner:
-      - name: John Beerson
-      - email: john@beers.demo.fake
+      name: John Beerson
+      email: john@beers.demo.fake
     
     depends_on:
       - ref('beers_with_breweries')
