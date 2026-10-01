@@ -1,0 +1,104 @@
+kind: factory
+name: Five-minute dispatch
+description: Every five minutes, a cron schedule mails Jean a fresh piece of corporate wisdom and posts the dispatch card to Slack.
+constants:
+  recipient: jean@datafold.com
+  slack_channel: "#jean-migration-factories-test"
+triggers:
+  every_five:
+    type: schedule.cron@v1
+    label: Every 5 minutes
+    description: A cron slot on the fives; the card counts down to the next one.
+    cron: "*/5 * * * *"
+    timezone: Europe/Paris
+    payload:
+      topic: synergy
+      quarter: Q4
+      buzzwords: 3
+actions:
+  dispatch:
+    type: email.send@v1
+    label: Mail the dispatch
+    description: One email per slot, text and HTML, with the slot's payload attached.
+    inputs: [every_five]
+    to: ["{{ constants.recipient }}"]
+    subject: "[{{ msg.quarter }} {{ msg.topic }}] Your five-minute dispatch is here ({{ trigger.key }})"
+    body:
+      text: |
+        Hi Jean,
+
+        Slot {{ trigger.key }} of the {{ msg.quarter }} {{ msg.topic }} programme has landed.
+
+        Three ({{ msg.buzzwords }}) things to action before the next slot:
+          1. Circle back on the low-hanging fruit in the value stream.
+          2. Double-click the north-star metric and socialise the learnings.
+          3. Move the needle. Ideally the right way.
+
+        This message was minted by trigger `{{ trigger.node }}` (a {{ trigger.type }}) on behalf of
+        {{ trigger.actor.name }}. It will happen again in five minutes. You cannot stop it. Well,
+        you can: disable the factory, or delete this file.
+
+        Yours in alignment,
+        The Factory
+      html: |
+        <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 560px; color: #1b2230">
+          <h2 style="margin: 0 0 4px; color: #356fff">&#9889; {{ msg.quarter }} {{ msg.topic | capitalize }} dispatch</h2>
+          <p style="margin: 0 0 16px; color: #7b8794; font-size: 13px">
+            Slot <code>{{ trigger.key }}</code> &middot; minted by <code>{{ trigger.node }}</code> ({{ trigger.type }})
+            on behalf of {{ trigger.actor.name }}
+          </p>
+          <p>Hi Jean,</p>
+          <p>Slot <b>{{ trigger.key }}</b> of the {{ msg.quarter }} {{ msg.topic }} programme has landed.
+             <b>{{ msg.buzzwords }}</b> things to action before the next slot:</p>
+          <table style="border-collapse: collapse; width: 100%; font-size: 14px">
+            <tr><td style="padding: 6px 8px; border-bottom: 1px solid #edf0f3"><b>1 &middot; Align</b></td><td style="padding: 6px 8px; border-bottom: 1px solid #edf0f3">Circle back on the low-hanging fruit in the value stream.</td></tr>
+            <tr><td style="padding: 6px 8px; border-bottom: 1px solid #edf0f3"><b>2 &middot; Amplify</b></td><td style="padding: 6px 8px; border-bottom: 1px solid #edf0f3">Double-click the north-star metric and socialise the learnings.</td></tr>
+            <tr><td style="padding: 6px 8px"><b>3 &middot; Accelerate</b></td><td style="padding: 6px 8px">Move the needle. Ideally the right way.</td></tr>
+          </table>
+          <blockquote style="margin: 16px 0; padding: 8px 12px; border-left: 3px solid #b8730a; background: #fbf0dc; color: #4a5568">
+            <i>You cannot stop it. Well, you can: disable the factory, or delete this file.</i>
+          </blockquote>
+          <p style="color: #7b8794; font-size: 12px">trace <code>{{ trigger.id }}</code> &middot; the slot's payload is attached as JSON &middot; fires again in five minutes</p>
+          <p>Yours in alignment,<br><b>The Factory</b></p>
+        </div>
+    attachments:
+      - filename: "dispatch-{{ trigger.key }}.json"
+        file:
+          text: |
+            { "quarter": "{{ msg.quarter }}", "topic": "{{ msg.topic }}", "buzzwords": {{ msg.buzzwords }}, "slot": "{{ trigger.key }}", "trace": "{{ trigger.id }}" }
+  announce:
+    type: slack.notify@v1
+    label: Post the dispatch
+    description: The same slot as a Block Kit card in the test channel.
+    inputs: [every_five]
+    channel: "{{ constants.slack_channel }}"
+    format: mrkdwn
+    text: ":zap: {{ msg.quarter }} {{ msg.topic }} dispatch · slot {{ trigger.key }} · {{ msg.buzzwords }} things to action"
+    blocks:
+      - type: header
+        text: { type: plain_text, text: ":zap: {{ msg.quarter }} {{ msg.topic | capitalize }} dispatch", emoji: true }
+      - type: context
+        elements:
+          - { type: mrkdwn, text: "Slot *{{ trigger.key }}* · minted by `{{ trigger.node }}` ({{ trigger.type }}) on behalf of {{ trigger.actor.name }}" }
+      - type: divider
+      - type: section
+        text: { type: mrkdwn, text: "*{{ msg.buzzwords }} things to action before the next slot*" }
+        fields:
+          - { type: mrkdwn, text: "*1 · Align*\nCircle back on the low-hanging fruit in the value stream." }
+          - { type: mrkdwn, text: "*2 · Amplify*\nDouble-click the north-star metric and socialise the learnings." }
+          - { type: mrkdwn, text: "*3 · Accelerate*\nMove the needle. Ideally the right way." }
+      - type: divider
+      - type: section
+        text: { type: mrkdwn, text: ">_You cannot stop it. Well, you can: disable the factory, or delete this file._" }
+      - type: context
+        elements:
+          - { type: mrkdwn, text: "trace `{{ trigger.id }}` · fires again in five minutes" }
+    attachments:
+      - filename: "dispatch-{{ trigger.key }}.json"
+        file:
+          text: |
+            { "quarter": "{{ msg.quarter }}", "topic": "{{ msg.topic }}", "buzzwords": {{ msg.buzzwords }}, "slot": "{{ trigger.key }}", "trace": "{{ trigger.id }}" }
+  log_sent:
+    type: tracing.log@v1
+    inputs: [dispatch.sent, dispatch.failed, announce.sent, announce.failed]
+    message: "dispatch for slot {{ trigger.key }} left the building"
