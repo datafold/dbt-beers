@@ -1,0 +1,20 @@
+kind: factory
+name: Demo
+description: Fire it by hand, wait a minute, log a greeting.
+triggers:
+  hello:
+    type: manual@v1
+    label: Say hello
+    fields: { name: str }
+actions:
+  wait:
+    type: flow.delay@v1
+    label: Wait a minute
+    inputs: [hello]
+    wait: 1m
+  greet:
+    type: tracing.log@v1
+    label: Log the greeting
+    inputs: [wait.out]
+    message: "Hello, {{ msg.name }}! (fired by {{ trigger.actor.name }})"
+    attributes: { name: "{{ msg.name }}" }
